@@ -7,6 +7,7 @@ const { Action, Form, listen, clearHandlers, events, setPort } = require('sharp-
 const getPort = require('get-port')
 global.React = React
 global.Component = React.Component
+global.Fragment = React.Fragment
 global.dump = dump
 global.Action = Action
 global.Form = Form
