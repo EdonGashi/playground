@@ -15,6 +15,7 @@ global.$ = '$'
 dump.source = false
 dump.hook('$', true)
 let httpPort
+const entry = './src/' + (process.argv[2] || 'main')
 getPort()
   .then(port => {
     setPort(port)
@@ -22,7 +23,7 @@ getPort()
     return dump.clear()
   })
   .then(() => {
-    require('./src/main.js')
+    require(entry)
   })
   .catch((e) => {
     dump.console = {
@@ -39,7 +40,7 @@ getPort()
       }
     }
 
-    require('./src/main.js')
+    require(entry)
   })
 
 events.once('newElement', () => {
