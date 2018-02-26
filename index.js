@@ -21,7 +21,6 @@ getPort()
     return dump.clear()
   })
   .then(() => {
-    console.log(httpPort)
     require('./src/main.js')
   })
   .catch((e) => {
