@@ -12,6 +12,7 @@ global.Action = Action
 global.Form = Form
 global._clearHandlers = clearHandlers
 global.$ = '$'
+dump.source = false
 dump.hook('$', true)
 let httpPort
 getPort()
