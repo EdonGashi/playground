@@ -3,7 +3,7 @@ const React = require('react')
 const ReactDOMServer = require('react-dom/server')
 require('sharp-pad-dump-react')
 const dump = require('sharp-pad-dump')
-const { Action, Form, listen, clearHandlers, events } = require('sharp-pad-forms')
+const { Action, Form, listen, clearHandlers, events, setPort } = require('sharp-pad-forms')
 const getPort = require('get-port')
 global.React = React
 global.Component = React.Component
@@ -13,8 +13,15 @@ global.Form = Form
 global._clearHandlers = clearHandlers
 global.$ = '$'
 dump.hook('$', true)
-dump.clear()
+let httpPort
+getPort()
+  .then(port => {
+    setPort(port)
+    httpPort = port
+    return dump.clear()
+  })
   .then(() => {
+    console.log(httpPort)
     require('./src/main.js')
   })
   .catch((e) => {
@@ -40,7 +47,5 @@ events.once('newElement', () => {
     return
   }
 
-  getPort()
-    .then(port => listen(port))
-    .catch(err => console.error(err))
+  listen(httpPort)
 })
