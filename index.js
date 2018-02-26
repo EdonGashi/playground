@@ -11,16 +11,8 @@ global.dump = dump
 global.Action = Action
 global.Form = Form
 global._clearHandlers = clearHandlers
-events.once('newElement', () => {
-  if (dump.console) {
-    return
-  }
-
-  getPort()
-    .then(port => listen(port))
-    .catch(err => console.error(err))
-})
-
+global.$ = '$'
+dump.hook('$', true)
 dump.clear()
   .then(() => {
     require('./src/main.js')
@@ -42,3 +34,13 @@ dump.clear()
 
     require('./src/main.js')
   })
+
+events.once('newElement', () => {
+  if (dump.console) {
+    return
+  }
+
+  getPort()
+    .then(port => listen(port))
+    .catch(err => console.error(err))
+})
