@@ -24,6 +24,11 @@ dump.source = function (source, value, accessor) {
     return null
   }
 
+  const index = source.indexOf('[$]')
+  if (index !== -1) {
+    return source.substring(0, index).trim()
+  }
+
   return source
 }
 
@@ -37,6 +42,10 @@ getPort()
     return dump.clear()
   })
   .then(() => {
+    if (dump.console) {
+      throw new Error()
+    }
+
     require(entry)
   })
   .catch((e) => {
@@ -47,10 +56,13 @@ getPort()
         }
 
         if (React.isValidElement(item)) {
-          console.log(ReactDOMServer.renderToStaticMarkup(item))
+          console.log('<<Install SharpPad extension to display html>>')
         } else {
           console.log(item)
         }
+      },
+      html() {
+        console.log('<<Install SharpPad extension to display html>>')
       }
     }
 
