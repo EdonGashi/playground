@@ -14,7 +14,7 @@ global.Form = Form
 global._clearHandlers = clearHandlers
 global.$ = '$'
 dump.sourcemaps = false
-dump.patchCallSites = true
+dump.wrapCallSite = require('babel-register/node_modules/source-map-support').wrapCallSite
 dump.source = function (source, value, accessor) {
   if (!source || source.length > 30) {
     return null
