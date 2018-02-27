@@ -16,7 +16,7 @@ global.$ = '$'
 dump.sourcemaps = false
 dump.patchCallSites = true
 dump.source = function (source, value, accessor) {
-  if (!source || !source.includes(accessor) || source.length > 30) {
+  if (!source || source.length > 30) {
     return null
   }
 
