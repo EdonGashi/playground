@@ -13,7 +13,20 @@ global.Action = Action
 global.Form = Form
 global._clearHandlers = clearHandlers
 global.$ = '$'
-dump.source = false
+dump.sourcemaps = false
+dump.patchCallSites = true
+dump.source = function (source, value, accessor) {
+  if (!source || !source.includes(accessor) || source.length > 30) {
+    return null
+  }
+
+  if (value && value.$type === 'html') {
+    return null
+  }
+
+  return source
+}
+
 dump.hook('$', true)
 let httpPort
 const entry = './src/' + (process.argv[2] || 'main')
