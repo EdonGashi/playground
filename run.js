@@ -1,10 +1,13 @@
 require('babel-register')
+const { wrapCallSite } = require('babel-register/node_modules/source-map-support')
 const React = require('react')
 const ReactDOMServer = require('react-dom/server')
 require('sharp-pad-dump-react')
 const dump = require('sharp-pad-dump')
 const { Action, Form, listen, clearHandlers, events, setPort } = require('sharp-pad-forms')
 const getPort = require('get-port')
+const getCallsites = require('error-callsites')
+const { dirname } = require('path')
 global.React = React
 global.Component = React.Component
 global.Fragment = React.Fragment
@@ -14,7 +17,7 @@ global.Form = Form
 global._clearHandlers = clearHandlers
 global.$ = '$'
 dump.sourcemaps = false
-dump.wrapCallSite = require('babel-register/node_modules/source-map-support').wrapCallSite
+dump.wrapCallSite = wrapCallSite
 dump.source = function (source, value, accessor) {
   if (!source || source.length > 30) {
     return null
@@ -35,6 +38,35 @@ dump.source = function (source, value, accessor) {
 dump.hook('$', true)
 let httpPort
 const entry = './src/' + (process.argv[2] || 'main')
+function run() {
+  const redirect = require(entry)
+  if (redirect && typeof redirect === 'string') {
+    require('./src/' + redirect)
+  }
+}
+
+dump.before = function (data, title, accessor, trace) {
+  if (accessor !== '$') {
+    return true
+  }
+
+  const msg = 'Cannot evaluate.'
+  if (!trace) {
+    throw new Error(msg)
+  }
+
+  let callsite = getCallsites(trace)[1]
+  if (!callsite) {
+    throw new Error(msg)
+  }
+
+  callsite = wrapCallSite(callsite)
+  console.log(dirname(callsite.getFileName()))
+  if (!dirname(callsite.getFileName()).includes('src')) {
+    throw new Error(msg)
+  }
+}
+
 getPort()
   .then(port => {
     setPort(port)
@@ -46,7 +78,7 @@ getPort()
       throw new Error()
     }
 
-    require(entry)
+    run()
   })
   .catch((e) => {
     dump.console = {
@@ -66,7 +98,7 @@ getPort()
       }
     }
 
-    require(entry)
+    run()
   })
 
 events.once('newElement', () => {

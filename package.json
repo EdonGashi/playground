@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/EdonGashi/react-playground#readme",
   "dependencies": {
+    "error-callsites": "^1.0.1",
     "get-port": "^3.2.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
