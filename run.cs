@@ -90,7 +90,9 @@ static class Output {
     Converters = { new StringEnumConverter() }
   };
 
-  private static readonly HttpClient HttpClient = new HttpClient();
+  private static readonly HttpClient HttpClient = new HttpClient {
+    Timeout = TimeSpan.FromMilliseconds(1000d)
+  };
 
   private static string Endpoint => $"http://localhost:{Port}";
 
