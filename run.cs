@@ -115,7 +115,13 @@ static class Output {
   }
 
   public static void Write(string text) {
-    Html("<div>" + System.Web.HttpUtility.HtmlEncode(text) + "</div>", null);
+    lock (WorkQueue) {
+      WorkQueue.Enqueue(() => WriteInternal(text));
+      if (WorkQueue.Count == 1) {
+        var oldFlush = QueueFlush;
+        QueueFlush = Task.Run(() => Loop(oldFlush));
+      }
+    }
   }
 
   public static void Html(string html) => Html(html, null);
@@ -139,6 +145,18 @@ static class Output {
         var oldFlush = QueueFlush;
         QueueFlush = Task.Run(() => Loop(oldFlush));
       }
+    }
+  }
+
+  private static async Task WriteInternal(string text) {
+    if (useConsole) {
+      Console.WriteLine(text);
+      Console.WriteLine();
+    } else {
+      var payload = new JObject(
+          new JProperty("$type", "html"),
+          new JProperty("$html", "<div>" + System.Web.HttpUtility.HtmlEncode(text) + "</div>"));
+      await Post(DumpContainer(payload.ToString(), null));
     }
   }
 

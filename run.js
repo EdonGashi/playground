@@ -94,6 +94,10 @@ getPort()
 
         console.log('<<Install SharpPad extension to display html>>')
         console.log()
+      },
+      write(text) {
+        console.log(text)
+        console.log()
       }
     }
 
