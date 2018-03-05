@@ -1,5 +1,5 @@
 require('babel-register')
-const { wrapCallSite } = require('babel-register/node_modules/source-map-support')
+// const { wrapCallSite } = require('source-map-support')
 const React = require('react')
 const ReactDOMServer = require('react-dom/server')
 require('sharp-pad-dump-react')
@@ -7,7 +7,7 @@ const dump = require('sharp-pad-dump')
 const { Action, Form, listen, clearHandlers, events, setPort } = require('sharp-pad-forms')
 const getPort = require('get-port')
 const getCallsites = require('error-callsites')
-const { dirname } = require('path')
+// const { dirname } = require('path')
 global.React = React
 global.Component = React.Component
 global.Fragment = React.Fragment
@@ -16,33 +16,31 @@ global.Action = Action
 global.Form = Form
 global._clearHandlers = clearHandlers
 global.$ = dump
-dump.sourcemaps = false
-dump.wrapCallSite = wrapCallSite
-dump.source = function (source, value, accessor) {
-  if (!source || source.length > 30) {
-    return null
-  }
+dump.source = false
+// dump.sourcemaps = false
+// dump.wrapCallSite = wrapCallSite
+// dump.source = function (source, value, accessor) {
+//   if (!source || source.length > 30) {
+//     return null
+//   }
 
-  if (value && value.$type === 'html') {
-    return null
-  }
+//   if (value && value.$type === 'html') {
+//     return null
+//   }
 
-  const index = source.indexOf('[$]')
-  if (index !== -1) {
-    return source.substring(0, index).trim()
-  }
+//   const index = source.indexOf('[$]')
+//   if (index !== -1) {
+//     return source.substring(0, index).trim()
+//   }
 
-  return source
-}
+//   return source
+// }
 
 dump.hook('$', true)
 let httpPort
-const entry = './src/' + (process.argv[2] || 'main')
+const entry = './' + (process.argv[2] || 'playground/main')
 function run() {
-  const redirect = require(entry)
-  if (redirect && typeof redirect === 'string') {
-    require('./src/' + redirect)
-  }
+  require(entry)
 }
 
 dump.before = function (data, title, accessor, trace) {
@@ -56,13 +54,7 @@ dump.before = function (data, title, accessor, trace) {
   }
 
   let callsite = getCallsites(trace)[1]
-  if (!callsite) {
-    throw new Error(msg)
-  }
-
-  callsite = wrapCallSite(callsite)
-  console.log(dirname(callsite.getFileName()))
-  if (!dirname(callsite.getFileName()).includes('src')) {
+  if (!callsite || !callsite.getFileName()) {
     throw new Error(msg)
   }
 }
@@ -84,7 +76,7 @@ getPort()
     dump.console = {
       data(item, title) {
         if (title) {
-          console.log(title)
+          console.log('--- ' + title + ' ---')
         }
 
         if (React.isValidElement(item)) {
@@ -92,9 +84,16 @@ getPort()
         } else {
           console.log(item)
         }
+
+        console.log()
       },
-      html() {
+      html(html, title) {
+        if (title) {
+          console.log('--- ' + title + ' ---')
+        }
+
         console.log('<<Install SharpPad extension to display html>>')
+        console.log()
       }
     }
 

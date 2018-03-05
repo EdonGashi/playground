@@ -1,0 +1,21 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.gitattributes": true,
+    "**/.gitignore": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/bin": true,
+    "**/obj": true,
+    "**/.vscode": true,
+    "**/.vs": true,
+    ".babelrc": true,
+    "init.bat": true,
+    "init.sh": true,
+    "LICENSE": true,
+    "package-lock.json": true,
+    "run.js": true,
+    "run.cs": true,
+    "README.md": true
+  }
+}

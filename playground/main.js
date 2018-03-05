@@ -1,0 +1,1 @@
+dump.write('Hello World!')

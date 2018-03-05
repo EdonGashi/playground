@@ -1,22 +1,24 @@
 {
-  "name": "react-playground",
+  "name": "playground",
   "version": "1.0.0",
   "description": "",
   "main": "run.js",
   "scripts": {
-    "start": "node run main",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "restore": "npm install && dotnet restore",
+    "start": "node run playground/main",
+    "node": "node run playground/main",
+    "dotnet": "dotnet run Playground.Program"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EdonGashi/react-playground.git"
+    "url": "git+https://github.com/EdonGashi/playground.git"
   },
   "author": "Edon Gashi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/EdonGashi/react-playground/issues"
+    "url": "https://github.com/EdonGashi/playground/issues"
   },
-  "homepage": "https://github.com/EdonGashi/react-playground#readme",
+  "homepage": "https://github.com/EdonGashi/playground#readme",
   "dependencies": {
     "error-callsites": "^1.0.1",
     "get-port": "^3.2.0",

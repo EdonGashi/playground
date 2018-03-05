@@ -5,9 +5,22 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "playground (dotnet)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceRoot}/bin/Debug/netcoreapp2.0/playground.dll",
+      "args": [
+        "Playground.Program"
+      ],
+      "cwd": "${workspaceRoot}",
+      "stopAtEntry": false,
+      "console": "internalConsole"
+    },
+    {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "playground (node)",
       "program": "${workspaceFolder}/run.js"
     }
   ]
